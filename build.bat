@@ -10,12 +10,12 @@ for /f "delims=" %%i in ('git config --get remote.origin.url') do (
 	)
 )
 for /f "tokens=*" %%i in ('docker images --format "{{.Repository}}"') do (
-	if %%i==dotfiles (
+	if %%i==!image_name! (
 		set image_exists=true
 	)
 )
 for /f "tokens=*" %%i in ('docker ps -a --format "{{.Names}}"') do (
-	if %%i==dotfiles (
+	if %%i==!container_name! (
 		set container_exists=true
 	)
 )
@@ -24,5 +24,8 @@ if !image_exists!==false (
 )
 if !container_exists!==false (
 	docker compose run --name !container_name! !image_name!
+) else (
+	docker start !container_name!
+	docker exec -it !container_name! /entrypoint.sh
 )
 

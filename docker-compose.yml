@@ -9,4 +9,5 @@ services:
         volumes:
           - ./:/home/${USER}/.local/share/chezmoi:ro
         image: dotfiles
+        container_name: dotfiles
 
